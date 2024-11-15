@@ -4,16 +4,20 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.hardware.usb.UsbDevice
 import android.hardware.usb.UsbManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.tx.printlib.Const
 import com.tx.printlib.UsbPrinter
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
     private var mUsbPrinter: UsbPrinter? = null
+    private var imageView: ImageView? = null
 
     private inner class MyThread : Thread() {
         override fun run() {
@@ -24,7 +28,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        findViewById<ImageView>(R.id.imageView)
         mUsbPrinter = UsbPrinter(applicationContext)
+
         findViewById<View>(R.id.button).setOnClickListener {
             val dev: UsbDevice? = correctDevice
             if (dev != null) {
@@ -95,6 +101,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun showMessage(msg: String) {
         (findViewById<View>(R.id.textView) as TextView).text = msg
+    }
+
+    fun showImage() {
+        imageView!!.setImageURI( Uri.fromFile(File("/sdcard/test.jpg")))
     }
 
     companion object {
